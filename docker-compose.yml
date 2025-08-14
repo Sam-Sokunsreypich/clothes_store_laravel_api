@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: laravel-app
+    volumes:
+      - ./:/var/www
+    expose:
+      - "9000"
+    networks:
+      - laravel
+
+  db:
+    image: postgres:15
+    container_name: pgsql
+    environment:
+      POSTGRES_DB: db_clothes_stores
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc092925462pich
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - laravel
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+volumes:
+  pgdata:
+
+networks:
+  laravel:
+    driver: bridge

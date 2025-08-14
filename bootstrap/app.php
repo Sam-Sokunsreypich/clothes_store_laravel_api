@@ -13,6 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+            // Add Sanctum middleware for API
+        $middleware->alias([
+            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class, // ← if you're using roles
+        ]);
+        
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

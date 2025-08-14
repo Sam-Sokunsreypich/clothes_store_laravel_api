@@ -51,7 +51,7 @@ class ProductsController extends Controller
         ], 201);
     }
     public function find_product($id){
-        $product = Products::find($product -> id);
+        $product = Products::find($id);
             if (!empty($product)){
                 return response() -> json($product);
             }else{
